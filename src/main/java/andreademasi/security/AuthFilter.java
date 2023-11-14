@@ -44,7 +44,7 @@ public class AuthFilter extends OncePerRequestFilter {
             User foundUser = userService.findUserById(Integer.parseInt(id));
 
             //Autorizzo lo user a procedere
-            Authentication authentication = new UsernamePasswordAuthenticationToken(foundUser, null);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(foundUser, null, foundUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             //Procedere verso il prossimo blocco della filter chain

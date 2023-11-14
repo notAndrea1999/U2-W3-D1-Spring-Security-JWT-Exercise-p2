@@ -1,5 +1,6 @@
 package andreademasi.services;
 
+import andreademasi.entities.Role;
 import andreademasi.entities.User;
 import andreademasi.exceptions.BadRequestException;
 import andreademasi.exceptions.NotFoundException;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,9 +18,11 @@ import java.io.IOException;
 @Service
 public class UserService {
     @Autowired
+    PasswordEncoder bcrypt;
+    @Autowired
     private UserRepository userRepo;
 
-    public User findUserById(long id) {
+    public User findUserById(long id) throws NotFoundException {
         return userRepo.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
@@ -40,7 +44,8 @@ public class UserService {
         newUser.setUsername(userDTO.username());
         newUser.setFirstName(userDTO.firstName());
         newUser.setLastName(userDTO.lastName());
-        newUser.setPassword(userDTO.password());
+        newUser.setRole(Role.USER);
+        newUser.setPassword(bcrypt.encode(userDTO.password()));
         newUser.setEmail(userDTO.email());
         return userRepo.save(newUser);
     }
@@ -54,7 +59,7 @@ public class UserService {
         return userRepo.save(foundUser);
     }
 
-    public void findUserByIdAndDelete(long id) {
+    public void findUserByIdAndDelete(long id) throws NotFoundException {
         User foundUser = this.findUserById(id);
         userRepo.delete(foundUser);
     }
