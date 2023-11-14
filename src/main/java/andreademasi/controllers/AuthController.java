@@ -44,4 +44,9 @@ public class AuthController {
         }
     }
 
+    @PatchMapping("/update/role/{id}")
+    public User findByIdAndUpdateRole(@PathVariable long id) {
+        return userService.findByIdAndUpdateRole(id);
+    }
+
 }

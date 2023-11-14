@@ -58,6 +58,5 @@ public class UserController {
         userService.findUserByIdAndDelete(loggedUser.getUserId());
     }
 
-    ;
 
 }

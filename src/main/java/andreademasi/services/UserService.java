@@ -69,4 +69,10 @@ public class UserService {
         return userRepo.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User con email " + email + " non trovato!"));
     }
+
+    public User findByIdAndUpdateRole(long id) {
+        User foundUser = this.findUserById(id);
+        foundUser.setRole(Role.ADMIN);
+        return userRepo.save(foundUser);
+    }
 }

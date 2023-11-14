@@ -20,7 +20,7 @@ public class AuthService {
     public String authUser(UserLoginDTO userLogin) {
 
         User newUser = userService.findByEmail(userLogin.email());
-        if (bcrypt.matches(newUser.getPassword(), userLogin.password())) {
+        if (bcrypt.matches(userLogin.password(), newUser.getPassword())) {
             return jwtTools.createToken(newUser);
         } else {
             throw new UnauthorizedException("Credenziali non valide");
